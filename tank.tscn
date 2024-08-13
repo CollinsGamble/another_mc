@@ -1,0 +1,27 @@
+[gd_scene load_steps=3 format=3 uid="uid://d0xk1c8m4dbfh"]
+
+[ext_resource type="Texture2D" uid="uid://b2j3g8d6rv3ro" path="res://assets/tank/DALL·E 2024-08-12 10.14.23 - A top-down view 2D tank designed for a strategy simulation game (SLG). The tank should have a military, modern design with a turret and tracks visible.webp" id="1_6gn00"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_acpjp"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_6gn00")
+}],
+"loop": true,
+"name": &"move",
+"speed": 5.0
+}]
+
+[node name="Tank" type="Area2D"]
+metadata/_edit_group_ = true
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="."]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_acpjp")
+animation = &"move"
+
+[node name="CountLabel" type="Label" parent="."]
+offset_right = 40.0
+offset_bottom = 23.0
