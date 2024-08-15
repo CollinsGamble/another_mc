@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://djacnpt3j7g3r"]
+
+[ext_resource type="Script" path="res://battle.gd" id="1_gydx8"]
+[ext_resource type="PackedScene" uid="uid://b0ddq72a5t4lc" path="res://tank_base.tscn" id="1_x23p1"]
+
+[node name="Battle" type="Area2D"]
+script = ExtResource("1_gydx8")
+bases = ExtResource("1_x23p1")
+
+[node name="base2" parent="." instance=ExtResource("1_x23p1")]
+position = Vector2(615, 160)
+
+[node name="base1" parent="." instance=ExtResource("1_x23p1")]
+position = Vector2(280, 157)
+
+[node name="BattleWatch" type="Timer" parent="."]
+
+[connection signal="timeout" from="BattleWatch" to="." method="_on_battle_watch_timeout"]

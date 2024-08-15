@@ -1,0 +1,64 @@
+[gd_scene load_steps=6 format=3 uid="uid://b0ddq72a5t4lc"]
+
+[ext_resource type="Script" path="res://tank_base.gd" id="1_ewi2d"]
+[ext_resource type="Texture2D" uid="uid://d121goby8cisr" path="res://assets/tank/tank_base.png" id="1_owusp"]
+[ext_resource type="Texture2D" uid="uid://cyqw0pdo6joac" path="res://assets/tank/tank_base_lv2.png" id="2_7b0ch"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_0k2cc"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_owusp")
+}],
+"loop": true,
+"name": &"level1",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_7b0ch")
+}],
+"loop": true,
+"name": &"level2",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_g6qfj"]
+radius = 5.09902
+
+[node name="TankBase" type="Area2D"]
+script = ExtResource("1_ewi2d")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(2, 5)
+scale = Vector2(0.0894206, 0.0845948)
+sprite_frames = SubResource("SpriteFrames_0k2cc")
+animation = &"level2"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_g6qfj")
+
+[node name="TroopsCount" type="Label" parent="."]
+offset_left = -20.0
+offset_top = -26.0
+offset_right = 20.0
+offset_bottom = -3.0
+text = "0"
+horizontal_alignment = 1
+
+[node name="SelectedCount" type="Label" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -51.0
+offset_right = 20.0
+offset_bottom = -28.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "0"
+horizontal_alignment = 1
+
+[node name="Position" type="Marker2D" parent="."]
