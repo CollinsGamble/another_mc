@@ -39,6 +39,9 @@ func updateDisplay():
 func releaseSelect():
 	selected_troops = 0;
 	updateDisplay()
+	# 不显示选择项
+	$SelectedCount.text = ''
+	# TODO 清除选中动画
 
 # 单击选一半
 func selectAhalf():
@@ -54,15 +57,12 @@ func selectAll():
 func gogogo(inBoundBase):
 	# 减去当前的选择数量
 	troops -= selected_troops
-	updateDisplay()
-	# 不显示
-	$SelectedCount.text = ''
+	releaseSelect()
 	# 创建新实例
 	var tank = tank_scene.instantiate()
 	tank.position = $Position.position
 	
-	
-	
+
 	
 
 
