@@ -1,7 +1,9 @@
+class_name TankBase
+
 extends Area2D
 
 @export var troops = 0
-var selected_troops = 0
+var selected_troops = -1
 
 var MAX_TROOP = 30
 
@@ -30,18 +32,20 @@ func increment(num):
 
 func updateDisplay():
 	$TroopsCount.text = str(troops)
-	$SelectedCount.text = str(selected_troops)
+
+	if selected_troops<0:
+        # 不显示选择项
+        $SelectedCount.text = ''
+    else:
+        $SelectedCount.text = str(selected_troops)
 
 
 
 #选择事件的Handles
 # 释放选择
 func releaseSelect():
-	selected_troops = 0;
+	selected_troops = -1;
 	updateDisplay()
-	# 不显示选择项
-	$SelectedCount.text = ''
-	# TODO 清除选中动画
 
 # 单击选一半
 func selectAhalf():
@@ -57,7 +61,8 @@ func selectAll():
 func gogogo(inBoundBase):
 	# 减去当前的选择数量
 	troops -= selected_troops
-	releaseSelect()
+	selected_troops = -1
+	updateDisplay()
 	# 创建新实例
 	var tank = tank_scene.instantiate()
 	tank.position = $Position.position

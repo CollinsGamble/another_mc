@@ -1,7 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://djacnpt3j7g3r"]
+[gd_scene load_steps=3 format=3 uid="uid://bpclvgn0ak4jf"]
 
 [ext_resource type="Script" path="res://battle.gd" id="1_gydx8"]
-[ext_resource type="PackedScene" uid="uid://b0ddq72a5t4lc" path="res://tank_base.tscn" id="1_x23p1"]
+[ext_resource type="PackedScene" uid="uid://bd0exung3j41o" path="res://tank_base.tscn" id="1_x23p1"]
 
 [node name="Battle" type="Area2D"]
 script = ExtResource("1_gydx8")
