@@ -7,6 +7,11 @@ var playerBases = Array()
 var drag_start_base = null
 @onready var line = $line
 
+# 触摸和双击
+var last_click_time = 0.0
+var double_click_threshold = 0.4  # 设置双击触摸的最大时间间隔（秒）
+var click_count = 0
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
     playerBases.append($base1)
@@ -28,11 +33,27 @@ func _on_battle_watch_timeout():
 func _input(event):
     if event is InputEventMouseButton:
         if event.pressed:
-            # 检查鼠标按下的位置是否在某个 TankBase 上
-            var clicked_base = get_tank_base_under_mouse()
-            if clicked_base:
-                drag_start_base = clicked_base
-                print("Start dragging: ", drag_start_base)
+            var current_time = Time.get_ticks_msec() / 1000.0  # 获取当前时间（秒）
+            if current_time - last_click_time < double_click_threshold:
+                click_count += 1
+            else:
+                click_count = 1  # 重置点击计数
+            last_click_time = current_time
+            if click_count>2:
+                # 处理双击事件
+                var clicked_base = get_tank_base_under_mouse()
+                if clicked_base:
+                    clicked_base.selectAll()
+                    # 在这里可以实现双击后的逻辑
+                    print("Double clicked on: ", clicked_base)
+            else:
+                # 单击处理
+                var clicked_base = get_tank_base_under_mouse()
+            
+                if clicked_base:
+                    clicked_base.plusAhalf()
+                    drag_start_base = clicked_base
+                    print("One Click OR Start dragging: ", drag_start_base)
         else:
             # 鼠标释放时，如果有拖动中的 TankBase
             if drag_start_base:

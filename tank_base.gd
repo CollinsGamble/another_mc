@@ -48,8 +48,8 @@ func releaseSelect():
     updateDisplay()
 
 # 单击选一半
-func selectAhalf():
-    selected_troops = troops/2;
+func plusAhalf():
+    selected_troops = selected_troops + (troops-selected_troops)/2;
     updateDisplay()	
 
 # 双击全选

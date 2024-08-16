@@ -9,9 +9,11 @@ bases = ExtResource("1_x23p1")
 
 [node name="base2" parent="." instance=ExtResource("1_x23p1")]
 position = Vector2(615, 160)
+troops = -1
 
 [node name="base1" parent="." instance=ExtResource("1_x23p1")]
 position = Vector2(280, 157)
+troops = -1
 
 [node name="BattleWatch" type="Timer" parent="."]
 
