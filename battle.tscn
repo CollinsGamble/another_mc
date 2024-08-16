@@ -15,4 +15,7 @@ position = Vector2(280, 157)
 
 [node name="BattleWatch" type="Timer" parent="."]
 
+[node name="line" type="Line2D" parent="."]
+default_color = Color(0.958985, 0.496425, 0.652412, 1)
+
 [connection signal="timeout" from="BattleWatch" to="." method="_on_battle_watch_timeout"]

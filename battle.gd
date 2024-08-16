@@ -2,53 +2,94 @@ extends Area2D
 
 @export var bases: PackedScene
 var battleTime = 0;
-var playerBases = Array();
+var playerBases = Array()
 
 var drag_start_base = null
+@onready var line = $line
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	playerBases.append($base1)
-	playerBases.append($base2)
-	$BattleWatch.start()
+    playerBases.append($base1)
+    playerBases.append($base2)
+    $BattleWatch.start()
+    line.width = 4
+    line.visible  = false
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	pass
+    pass
 
 
 func _on_battle_watch_timeout():
-	battleTime+=1;
-	for pb in playerBases:
-		pb.grow(1)
+    battleTime+=1;
+    for pb in playerBases:
+        pb.grow(1)
 
 func _input(event):
-	if event is InputEventMouseButton:
-		if event.pressed:
-			# 检查鼠标按下的位置是否在某个 TankBase 上
-			var clicked_base = get_tank_base_under_mouse()
-			if clicked_base:
-				drag_start_base = clicked_base
-				print("Start dragging: ", drag_start_base)
-		else:
-			# 鼠标释放时，如果有拖动中的 TankBase
-			if drag_start_base:
-				var released_base = get_tank_base_under_mouse()
-				if released_base and released_base != drag_start_base:
-					print("Released on different base: ", released_base)
-					# 在这里可以处理从一个 TankBase 拖动到另一个的逻辑
-				else:
-					print("Released outside or on the same base")
-				drag_start_base = null
-	
-	elif event is InputEventMouseMotion and drag_start_base:
-		# 拖动中更新当前 TankBase 的位置
-		#drag_start_base.position = get_global_mouse_position()
-		pass
+    if event is InputEventMouseButton:
+        if event.pressed:
+            # 检查鼠标按下的位置是否在某个 TankBase 上
+            var clicked_base = get_tank_base_under_mouse()
+            if clicked_base:
+                drag_start_base = clicked_base
+                print("Start dragging: ", drag_start_base)
+        else:
+            # 鼠标释放时，如果有拖动中的 TankBase
+            if drag_start_base:
+                line.visible  = false
+                var released_base = get_tank_base_under_mouse()
+                if released_base and released_base != drag_start_base:
+                    print("Released on different base: ", released_base)
+                    # 在这里可以处理从一个 TankBase 拖动到另一个的逻辑
+                else:
+                    print("Released outside or on the same base")
+                drag_start_base = null
+    
+    elif event is InputEventMouseMotion and drag_start_base:
+        # 拖动中更新当前 TankBase 的位置
+        #drag_start_base.position = get_global_mouse_position()
+        _update_line(drag_start_base.position,event.position)
 
 # 检查鼠标下的 TankBase（或其他按钮）
 func get_tank_base_under_mouse():
-	for child in get_children():
-		if child is TankBase:
-			if child.get_global_rect(Vector2(65, 65)).has_point(get_global_mouse_position()):
-				return child
-	return null
+    for child in get_children():
+        if child is TankBase:
+            if child.get_global_rect(Vector2(65, 65)).has_point(get_global_mouse_position()):
+                return child
+    return null
+
+
+func _update_line(start_position,current_position):
+    line.visible  = true
+    # 设置起点和终点
+    line.clear_points()
+    line.add_point(start_position)
+    line.add_point(current_position)	
+    
+    # 绘制箭头头部
+    _draw_arrow_head(start_position,current_position)
+
+func _draw_arrow_head(start_position,current_position):
+    # 清除旧的箭头头部
+    line.clear_points()
+    
+    # 计算方向向量
+    var direction = (current_position - start_position).normalized()
+    
+    # 箭头头部的大小
+    var arrow_size = 20
+    var arrow_width = 10
+    
+    # 箭头的两个边角
+    var left_point = current_position - direction.rotated(deg_to_rad(30)) * arrow_size
+    var right_point = current_position - direction.rotated(deg_to_rad(-30)) * arrow_size
+    
+    # 绘制箭头主干
+    line.add_point(start_position)
+    line.add_point(current_position)
+    
+    # 添加箭头的两个边角点来形成三角形头部
+    line.add_point(left_point)
+    line.add_point(current_position)
+    line.add_point(right_point)
+    line.add_point(current_position)
