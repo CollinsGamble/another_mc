@@ -68,13 +68,11 @@ func gogogo(inBoundBase):
 	tank.position = $Position.position
 	
 
-	
-
-
-# LevelManager
-func levelUp(num):
-# level up will change the MAX_TROOPS and Animation2D
+# 被选中动画切换
+func selectAnimation():
 	pass
 
-func bufferUp():
-	pass
+# 获取全局包围盒
+func get_global_rect(size: Vector2):
+	var global_position = get_global_position()  # 获取 TankBase 的全局位置
+	return Rect2(global_position - size / 2, size)  # 返回以中心点为基础的包围盒
