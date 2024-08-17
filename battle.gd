@@ -33,37 +33,46 @@ func _on_battle_watch_timeout():
 func _input(event):
     if event is InputEventMouseButton:
         if event.pressed:
+            # 按下
             var current_time = Time.get_ticks_msec() / 1000.0  # 获取当前时间（秒）
             if current_time - last_click_time < double_click_threshold:
                 click_count += 1
             else:
                 click_count = 1  # 重置点击计数
             last_click_time = current_time
-            if click_count>2:
-                # 处理双击事件
+            if click_count>=2:
+                # 处理多击事件
                 var clicked_base = get_tank_base_under_mouse()
                 if clicked_base:
                     clicked_base.selectAll()
                     # 在这里可以实现双击后的逻辑
                     print("Double clicked on: ", clicked_base)
             else:
-                # 单击处理
+                # 单击
                 var clicked_base = get_tank_base_under_mouse()
             
                 if clicked_base:
+                    cleanOtherBaseSelect(clicked_base)
                     clicked_base.plusAhalf()
                     drag_start_base = clicked_base
                     print("One Click OR Start dragging: ", drag_start_base)
         else:
-            # 鼠标释放时，如果有拖动中的 TankBase
+            # drag松开
             if drag_start_base:
+                # 拖动松开
                 line.visible  = false
                 var released_base = get_tank_base_under_mouse()
-                if released_base and released_base != drag_start_base:
-                    print("Released on different base: ", released_base)
-                    # 在这里可以处理从一个 TankBase 拖动到另一个的逻辑
+                if released_base:
+                    if released_base != drag_start_base:
+                        # 一个Base拖到了另一个Base上
+                        print("Released on different base: ", released_base)
+                        # 在这里可以处理从一个 TankBase 拖动到另一个的逻辑
+                    else:
+                        # 还是在自己的Base
+                        print("Released on Same base: ", released_base)
                 else:
-                    print("Released outside or on the same base")
+                    # 并非在任何Base上release
+                    print("Released outside")
                 drag_start_base = null
     
     elif event is InputEventMouseMotion and drag_start_base:
@@ -78,7 +87,12 @@ func get_tank_base_under_mouse():
             if child.get_global_rect(Vector2(65, 65)).has_point(get_global_mouse_position()):
                 return child
     return null
-
+    
+func cleanOtherBaseSelect(clicked_base):
+    for child in get_children():
+        if child is TankBase:
+            if child != clicked_base:
+                child.releaseSelect()
 
 func _update_line(start_position,current_position):
     line.visible  = true
